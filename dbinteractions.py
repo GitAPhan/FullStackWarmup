@@ -32,3 +32,50 @@ def disconnect_db(conn, cursor):
     except Exception as e:
         print(e)
         print("connection close error")
+
+def get_hero_db():
+    conn, cursor = connect_db()
+    heros = None
+    heros_labeled = []
+    
+    cursor.execute("select id, name, secret_identity, powers, power_rating, image_url from hero")
+    heros = cursor.fetchall()
+
+    disconnect_db(conn, cursor)
+
+    for hero in heros:
+        hero_dict = {
+            "id": hero[0],
+            "name": hero[1],
+            "secret_identity": hero[2],
+            "powers": hero[3],
+            "power_rating": hero[4],
+            "image_url": hero[5]
+        }
+        heros_labeled.append(hero_dict)
+
+    return heros_labeled
+
+def get_villian_db():
+    conn, cursor = connect_db()
+    villians = None
+    villians_labeled = []
+
+    
+    cursor.execute("select id, name, secret_identity, powers, power_rating, image_url from villian")
+    villians = cursor.fetchall()
+
+    disconnect_db(conn, cursor)
+
+    for villian in villians:
+        villian_dict = {
+            "id": villian[0],
+            "name": villian[1],
+            "secret_identity": villian[2],
+            "powers": villian[3],
+            "power_rating": villian[4],
+            "image_url": villian[5]
+        }
+        villians_labeled.append(villian_dict)
+
+    return villians_labeled
