@@ -1,6 +1,7 @@
 from flask import Flask, request, Response
 import dbinteractions as db
 import json
+import sys
 
 app = Flask(__name__)
 
@@ -20,4 +21,21 @@ def get_villian():
 
     return Response(villians_json, mimetype="application/json", status=200)
 
-app.run(debug=True)
+if len(sys.argv) > 1:
+    mode = sys.argv[1]
+else:
+    print("You must pass a mode to run this python script. Either 'testing' or 'production'")
+    exit() 
+
+if mode == "testing":
+    print("running in testing mode!")
+    from flask_cors import CORS
+    CORS(app)
+    app.run(debug=True)
+elif mode == "production":
+    print("running in production mode")
+    import bjoern # type: ignore
+    bjoern.run(app, "0.0.0.0", 5005)
+else:
+    print("Please run with either 'testing' or 'production'")
+    exit()
